@@ -5,7 +5,7 @@ const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 5081;
 
 // PostgreSQL pool for database connection
 const pool = new Pool({
@@ -13,7 +13,7 @@ const pool = new Pool({
   host: 'db',
   database: 'postgres',
   password: 'gambit',
-  port: 5432,
+  port: 5455,
 });
 
 app.use(cors());
