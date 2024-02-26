@@ -106,14 +106,7 @@ function DartBoard(props) {
         const y = event.clientY - rect.top;
         const dx = x - (canvas.width / 2);
         const dy = y - (canvas.height / 2);
-        
         const r = Math.sqrt(dx*dx + dy*dy);
-        let theta = Math.atan2(dy, dx);
-
-        if (theta < 0) {
-            theta += 2 * Math.PI;
-        }
-        
         const px_per_mm = canvas.width / board_diam_mm;
 
         let score = 0
@@ -130,24 +123,20 @@ function DartBoard(props) {
             name = "MISS"
         } else {
             // Definitely hit a number. Which?
-            
-            for (let i = 0; i < 20; ++i) {
-            const startAngle = (i === 0 ? 2 * Math.PI : i * arcSize) - (arcSize / 2);
-            const endAngle = (i + 1) * arcSize - (arcSize / 2);
-        
-            // At i = 0, number 6. We flip from 2 * Math.PI to 0
-            if (startAngle > endAngle ? (theta >= startAngle || theta <= endAngle) : (theta >= startAngle && theta <= endAngle)) {
-                score = numbers[i];
-                name = score.toString()
-                
-                if (r >= ((px_per_mm * double_diam_mm) / 2) - double_size_mm) {
-                    score *= 2;
-                    name = "D" + name
-                } else if (r <= ((px_per_mm * treble_diam_mm) / 2) && r >= ((px_per_mm * treble_diam_mm) / 2) - treble_size_mm) {
-                    score *= 3;
-                    name = "T" + name
-                }
+            let i = Math.round(Math.atan2(dy, dx) / arcSize);
+            if (i < 0) {
+                i += 20;
             }
+
+            score = numbers[i];
+            name = score.toString()
+
+            if (r >= ((px_per_mm * double_diam_mm) / 2) - double_size_mm) {
+                score *= 2;
+                name = "D" + name
+            } else if (r <= ((px_per_mm * treble_diam_mm) / 2) && r >= ((px_per_mm * treble_diam_mm) / 2) - treble_size_mm) {
+                score *= 3;
+                name = "T" + name
             }
         }
 
